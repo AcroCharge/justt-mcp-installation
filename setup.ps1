@@ -88,7 +88,7 @@ $connectors = [ordered]@{
 foreach ($name in $connectors.Keys) {
     $entry = @{
         command = $npxPath
-        args    = @("-y", "@modelcontextprotocol/mcp-remote", $connectors[$name])
+        args    = @("-y", "mcp-remote", $connectors[$name])
     }
     if ($config["mcpServers"].ContainsKey($name)) {
         Write-Host "  ↺ updated: $name"

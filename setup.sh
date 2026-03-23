@@ -107,7 +107,7 @@ added, updated = [], []
 for name, url in connectors.items():
     entry = {
         "command": npx_path,
-        "args": ["-y", "@modelcontextprotocol/mcp-remote", url],
+        "args": ["-y", "mcp-remote", url],
     }
     if name in config["mcpServers"]:
         updated.append(name)
