@@ -121,7 +121,10 @@ foreach ($name in $connectors.Keys) {
 
 # --- 5. Write back ----------------------------------------------------------
 
-$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+$json = $config | ConvertTo-Json -Depth 10
+# Use .NET directly to write UTF-8 without BOM — PowerShell 5.1's Set-Content
+# -Encoding UTF8 silently adds a BOM which breaks JSON parsers
+[System.IO.File]::WriteAllText($configPath, $json, (New-Object System.Text.UTF8Encoding $false))
 
 Write-Host ""
 Write-Host "Done! Restart Claude for changes to take effect." -ForegroundColor Green
