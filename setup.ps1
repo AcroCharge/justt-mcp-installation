@@ -48,18 +48,29 @@ Write-Host "✓ npx: $npxPath" -ForegroundColor Green
 
 # --- 2. Locate Claude config ------------------------------------------------
 
-$configDir  = "$env:APPDATA\Claude"
-$configPath = "$configDir\claude_desktop_config.json"
+# Claude Desktop installed via MSIX uses a virtualized path under LocalAppData\Packages
+$msixDir = Get-ChildItem "$env:LOCALAPPDATA\Packages" -Filter "Claude_*" -ErrorAction SilentlyContinue | Select-Object -First 1
 
-if (-not (Test-Path $configDir)) {
-    Write-Host "Claude directory not found at: $configDir" -ForegroundColor Red
-    Write-Host "Is the Claude desktop app installed?"
-    Pause-AndExit 1
+if ($msixDir) {
+    $configDir  = "$($msixDir.FullName)\LocalCache\Roaming\Claude"
+    $configPath = "$configDir\claude_desktop_config.json"
+    Write-Host "✓ Claude config (MSIX): $configPath" -ForegroundColor Green
+} else {
+    $configDir  = "$env:APPDATA\Claude"
+    $configPath = "$configDir\claude_desktop_config.json"
+    if (-not (Test-Path $configDir)) {
+        Write-Host "Claude directory not found." -ForegroundColor Red
+        Write-Host "Is the Claude desktop app installed and has it been opened at least once?"
+        Pause-AndExit 1
+    }
+    Write-Host "✓ Claude config: $configPath" -ForegroundColor Green
 }
 
-Write-Host "✓ Claude config: $configPath" -ForegroundColor Green
-
 # --- 3. Read existing config ------------------------------------------------
+
+if (-not (Test-Path $configDir)) {
+    New-Item -ItemType Directory -Path $configDir -Force | Out-Null
+}
 
 if (Test-Path $configPath) {
     try {
