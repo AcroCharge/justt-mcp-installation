@@ -97,7 +97,8 @@ if (Test-Path $configPath) {
         $config = ConvertTo-Hashtable $parsed
     } catch {
         $backup = "$configPath.bak"
-        Write-Host "  Warning: existing config has invalid JSON — backing up to $backup" -ForegroundColor Yellow
+        Write-Host "  Warning: could not read existing config — backing up to $backup" -ForegroundColor Yellow
+        Write-Host "  Error detail: $_" -ForegroundColor Yellow
         Copy-Item $configPath $backup -Force
         $config = @{}
     }
