@@ -17,6 +17,21 @@ function Pause-AndExit($code) {
     exit $code
 }
 
+# ConvertFrom-Json -AsHashtable only exists in PS 7+; this works on PS 5.1+
+function ConvertTo-Hashtable($obj) {
+    if ($obj -is [System.Management.Automation.PSCustomObject]) {
+        $hash = @{}
+        foreach ($prop in $obj.PSObject.Properties) {
+            $hash[$prop.Name] = ConvertTo-Hashtable $prop.Value
+        }
+        return $hash
+    } elseif ($obj -is [System.Object[]] -or $obj -is [System.Collections.IEnumerable] -and $obj -isnot [string]) {
+        return @($obj | ForEach-Object { ConvertTo-Hashtable $_ })
+    } else {
+        return $obj
+    }
+}
+
 Write-Host ""
 Write-Host "Justt MCP Setup" -ForegroundColor White
 Write-Host "================================"
@@ -78,11 +93,12 @@ if (-not (Test-Path $configDir)) {
 if (Test-Path $configPath) {
     try {
         $raw    = Get-Content $configPath -Raw -Encoding UTF8
-        $config = $raw | ConvertFrom-Json -AsHashtable
+        $parsed = $raw | ConvertFrom-Json
+        $config = ConvertTo-Hashtable $parsed
     } catch {
         $backup = "$configPath.bak"
         Write-Host "  Warning: existing config has invalid JSON — backing up to $backup" -ForegroundColor Yellow
-        Copy-Item $configPath $backup
+        Copy-Item $configPath $backup -Force
         $config = @{}
     }
 } else {
@@ -122,8 +138,8 @@ foreach ($name in $connectors.Keys) {
 # --- 5. Write back ----------------------------------------------------------
 
 $json = $config | ConvertTo-Json -Depth 10
-# Use .NET directly to write UTF-8 without BOM — PowerShell 5.1's Set-Content
-# -Encoding UTF8 silently adds a BOM which breaks JSON parsers
+# Write UTF-8 without BOM — PS 5.1 Set-Content -Encoding UTF8 adds a BOM
+# which breaks JSON parsers
 [System.IO.File]::WriteAllText($configPath, $json, (New-Object System.Text.UTF8Encoding $false))
 
 Write-Host ""
