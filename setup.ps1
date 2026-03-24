@@ -43,7 +43,10 @@ if (-not $npxCmd) {
     Pause-AndExit 1
 }
 
-$npxPath = $npxCmd.Source
+# Claude desktop cannot execute .ps1 files directly — use npx.cmd instead
+$npxDir  = Split-Path $npxCmd.Source
+$npxPath = Join-Path $npxDir "npx.cmd"
+if (-not (Test-Path $npxPath)) { $npxPath = $npxCmd.Source }
 Write-Host "✓ npx: $npxPath" -ForegroundColor Green
 
 # --- 2. Locate Claude config ------------------------------------------------
