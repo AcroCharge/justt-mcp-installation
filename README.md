@@ -4,7 +4,7 @@
 
 ## For Justt employees — set up your local MCP connectors
 
-Justt's Claude plugins (Salesforce, Gong, Snowflake, Freshdesk, Fullstory) connect to an internal API server protected by the Justt VPN. Claude for Work distributes these plugins org-wide, but the built-in connector mechanism routes through Anthropic's cloud — which can't reach the VPN.
+Justt's Claude plugins (Salesforce, Gong, Snowflake, Freshdesk, Fullstory, HubSpot) connect to an internal API server protected by the Justt VPN. Claude for Work distributes these plugins org-wide, but the built-in connector mechanism routes through Anthropic's cloud — which can't reach the VPN.
 
 The fix: run this one-time script to configure the connectors as **personal MCP servers** in your local Claude config. They run on your machine, where VPN is active.
 
@@ -67,6 +67,7 @@ The scripts (`setup.sh` for Mac, `setup.ps1` for Windows) share a single `connec
 | `justt-commercial-snowflake-mcp` | Snowflake analytics |
 | `justt-freshdesk-mcp` | Freshdesk support tickets |
 | `justt-fullstory-mcp` | Fullstory session replays |
+| `justt-hubspot-mcp` | HubSpot CRM |
 
 ### Adding a new integration
 

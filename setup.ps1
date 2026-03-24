@@ -81,6 +81,7 @@ $connectors = [ordered]@{
     "justt-commercial-snowflake-mcp" = "https://plugins-api.justt.ai/mcp/snowflake/"
     "justt-freshdesk-mcp"            = "https://plugins-api.justt.ai/mcp/freshdesk/"
     "justt-fullstory-mcp"            = "https://plugins-api.justt.ai/mcp/fullstory/"
+    "justt-hubspot-mcp"              = "https://plugins-api.justt.ai/mcp/hubspot/"
 }
 
 # ---------------------------------------------------------------------------
