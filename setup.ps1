@@ -11,6 +11,12 @@
 
 $ErrorActionPreference = "Stop"
 
+function Pause-AndExit($code) {
+    Write-Host ""
+    Read-Host "Press Enter to close this window"
+    exit $code
+}
+
 Write-Host ""
 Write-Host "Justt MCP Setup" -ForegroundColor White
 Write-Host "================================"
@@ -24,17 +30,17 @@ if (-not $npxCmd) {
     $winget = Get-Command winget -ErrorAction SilentlyContinue
     if ($winget) {
         winget install --id OpenJS.NodeJS -e --accept-source-agreements --accept-package-agreements
-        # Refresh PATH for current session
-        $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
-                    [System.Environment]::GetEnvironmentVariable("PATH", "User")
-        $npxCmd = Get-Command npx -ErrorAction SilentlyContinue
+        Write-Host ""
+        Write-Host "Node.js installed." -ForegroundColor Green
+        Write-Host "Please close this window, open a new PowerShell window, and re-run the setup:" -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "  irm https://raw.githubusercontent.com/AcroCharge/justt-mcp-installation/main/setup.ps1 | iex" -ForegroundColor Cyan
+        Pause-AndExit 0
     }
-    if (-not $npxCmd) {
-        Write-Host "Could not find or install Node.js." -ForegroundColor Red
-        Write-Host "Please install it manually: https://nodejs.org"
-        Write-Host "Then re-run this script."
-        exit 1
-    }
+    Write-Host "Could not find or install Node.js." -ForegroundColor Red
+    Write-Host "Please install it manually: https://nodejs.org"
+    Write-Host "Then re-run this script."
+    Pause-AndExit 1
 }
 
 $npxPath = $npxCmd.Source
@@ -48,7 +54,7 @@ $configPath = "$configDir\claude_desktop_config.json"
 if (-not (Test-Path $configDir)) {
     Write-Host "Claude directory not found at: $configDir" -ForegroundColor Red
     Write-Host "Is the Claude desktop app installed?"
-    exit 1
+    Pause-AndExit 1
 }
 
 Write-Host "✓ Claude config: $configPath" -ForegroundColor Green
@@ -105,4 +111,4 @@ $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
 
 Write-Host ""
 Write-Host "Done! Restart Claude for changes to take effect." -ForegroundColor Green
-Write-Host ""
+Pause-AndExit 0
