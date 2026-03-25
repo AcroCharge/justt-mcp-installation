@@ -98,7 +98,19 @@ fi
 
 echo -e "${GREEN}✓${NC} Claude config: $CONFIG"
 
-# --- 3. Write MCP entries (via python3, always available on Mac) ----------
+# --- 3. Clear stale npx cache if config previously used NVM ---------------
+# If any existing connector used an NVM-managed npx and we're now switching
+# to a Homebrew npx, the old cached mcp-remote modules will be incompatible
+# (different node version hash) and crash with MODULE_NOT_FOUND.
+if [[ "$NPX" != *".nvm"* ]] && [ -f "$CONFIG" ] && [ -d "$HOME/.npm/_npx" ]; then
+  if grep -q "\.nvm" "$CONFIG" 2>/dev/null; then
+    echo -e "${YELLOW}  Detected stale NVM npx cache — clearing to avoid module errors...${NC}"
+    rm -rf "$HOME/.npm/_npx"
+    echo -e "${GREEN}✓${NC} npx cache cleared"
+  fi
+fi
+
+# --- 4. Write MCP entries (via python3, always available on Mac) ----------
 
 python3 - "$CONFIG" "$NPX" <<'PYTHON'
 import json, sys, os
