@@ -31,14 +31,28 @@ for candidate in /opt/homebrew/bin/npx /usr/local/bin/npx; do
     break
   fi
 done
+
+# If only an NVM-managed npx is available, prefer installing via Homebrew instead.
+# Claude Desktop launches without a shell environment, so NVM paths don't work reliably.
 if [ -z "$NPX" ] && command -v npx &>/dev/null; then
-  NPX=$(command -v npx)
+  FOUND_NPX=$(command -v npx)
+  if [[ "$FOUND_NPX" == *".nvm"* ]] && command -v brew &>/dev/null; then
+    echo -e "${YELLOW}Found npx via nvm ($FOUND_NPX) — installing Node via Homebrew for Claude Desktop compatibility...${NC}"
+    brew install node || true
+    for candidate in /opt/homebrew/bin/npx /usr/local/bin/npx; do
+      if [ -x "$candidate" ]; then NPX="$candidate"; break; fi
+    done
+  fi
+  # Use whatever was found if Homebrew install didn't help
+  if [ -z "$NPX" ]; then
+    NPX="$FOUND_NPX"
+  fi
 fi
 
 if [ -z "$NPX" ]; then
   echo -e "${YELLOW}Node.js not found. Attempting to install...${NC}"
 
-  # Try Homebrew
+  # Try Homebrew first — gives a stable path that Claude Desktop can use
   if command -v brew &>/dev/null; then
     brew install node || true
     for candidate in /opt/homebrew/bin/npx /usr/local/bin/npx; do
@@ -46,9 +60,9 @@ if [ -z "$NPX" ]; then
     done
   fi
 
-  # Fall back to nvm (no sudo, works on any macOS version)
+  # Fall back to nvm only if Homebrew is not available
   if [ -z "$NPX" ]; then
-    echo "  Trying nvm..."
+    echo "  Homebrew not available — trying nvm (note: may not work with Claude Desktop on some machines)..."
     export NVM_DIR="$HOME/.nvm"
     curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
