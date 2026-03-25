@@ -37,14 +37,32 @@ fi
 
 if [ -z "$NPX" ]; then
   echo -e "${YELLOW}Node.js not found. Attempting to install...${NC}"
+
+  # Try Homebrew
   if command -v brew &>/dev/null; then
-    brew install node
+    brew install node || true
     for candidate in /opt/homebrew/bin/npx /usr/local/bin/npx; do
       if [ -x "$candidate" ]; then NPX="$candidate"; break; fi
     done
   fi
+
+  # Fall back to nvm (no sudo, works on any macOS version)
   if [ -z "$NPX" ]; then
-    echo -e "${RED}Could not find or install Node.js.${NC}"
+    echo "  Trying nvm..."
+    export NVM_DIR="$HOME/.nvm"
+    curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install --lts 2>/dev/null || true
+    if command -v npx &>/dev/null; then
+      NPX=$(command -v npx)
+    elif [ -d "$NVM_DIR/versions/node" ]; then
+      NODE_VER=$(ls "$NVM_DIR/versions/node" | sort -V | tail -1)
+      [ -x "$NVM_DIR/versions/node/$NODE_VER/bin/npx" ] && NPX="$NVM_DIR/versions/node/$NODE_VER/bin/npx"
+    fi
+  fi
+
+  if [ -z "$NPX" ]; then
+    echo -e "${RED}Could not install Node.js automatically.${NC}"
     echo "Please install it manually: https://nodejs.org"
     echo "Then re-run this script."
     exit 1
