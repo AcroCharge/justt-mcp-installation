@@ -113,7 +113,7 @@ fi
 # --- 4. Write MCP entries (via python3, always available on Mac) ----------
 
 python3 - "$CONFIG" "$NPX" <<'PYTHON'
-import json, sys, os
+import json, sys, os, pathlib
 
 config_path = sys.argv[1]
 npx_path    = sys.argv[2]
@@ -154,6 +154,12 @@ for name, url in connectors.items():
         "command": npx_path,
         "args": ["-y", "mcp-remote", url],
     }
+    # When npx lives inside an nvm directory, Claude Desktop won't have node
+    # on its PATH (no shell init runs).  Inject the nvm bin dir into PATH so
+    # the #!/usr/bin/env node shebang in npx can resolve.
+    if ".nvm" in npx_path:
+        nvm_bin = str(pathlib.Path(npx_path).parent)
+        entry["env"] = {"PATH": nvm_bin + ":/usr/bin:/bin"}
     if name in config["mcpServers"]:
         updated.append(name)
     else:
