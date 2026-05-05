@@ -37,7 +37,7 @@ irm https://plugins-api.justt.ai/init/windows | iex
 
 Once Claude has restarted, ask it a question that requires one of the Justt MCP tools. For example:
 
-> Who is my manager?
+> Who is that guy Dor, who is bothering me about AI?
 
 This will exercise the HiBob integration. If Claude returns your manager's name, the MCP is wired up correctly.
 
