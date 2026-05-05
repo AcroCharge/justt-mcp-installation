@@ -20,7 +20,7 @@ curl -fsSL https://plugins-api.justt.ai/init/mac | bash
 
 ### Windows
 
-Open PowerShell and run:
+Open PowerShell — press **Win + R**, type `powershell`, and press Enter (or click the Start menu, search for "PowerShell", and open it). Then run:
 
 ```powershell
 irm https://plugins-api.justt.ai/init/windows | iex
@@ -32,6 +32,14 @@ irm https://plugins-api.justt.ai/init/windows | iex
 
 - **Mac** — Quit Claude completely (right-click the dock icon → Quit, or Cmd+Q)
 - **Windows** — Close Claude and end the process in Task Manager to make sure it fully stops
+
+## Test That It Works
+
+Once Claude has restarted, ask it a question that requires one of the Justt MCP tools. For example:
+
+> Who is my manager?
+
+This will exercise the HiBob integration. If Claude returns your manager's name, the MCP is wired up correctly.
 
 ## Troubleshooting
 
