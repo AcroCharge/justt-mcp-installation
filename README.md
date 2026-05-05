@@ -39,7 +39,7 @@ Once Claude has restarted, ask it a question that requires one of the Justt MCP 
 
 > Who is that guy Dor, who is bothering me about AI?
 
-This will exercise the HiBob integration. If Claude returns your manager's name, the MCP is wired up correctly.
+This will exercise the HiBob integration.
 
 ## Troubleshooting
 
