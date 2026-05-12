@@ -26,6 +26,8 @@ Open PowerShell — press **Win + R**, type `powershell`, and press Enter (or cl
 irm https://plugins-api.justt.ai/init/windows | iex
 ```
 
+> **Run this command twice on Windows.** The first run installs Node.js and then exits — the newly installed `npx` is not yet available in that PowerShell session. **Close the PowerShell window, open a fresh one, and run the same command again.** The second run is the one that actually wires `justt-mcp` into Claude. (If Node.js was already installed on your machine, a single run is enough — but running it again is harmless.)
+
 ## After Installation
 
 **Restart Claude** for the changes to take effect:
