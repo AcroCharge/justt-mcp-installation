@@ -1,14 +1,14 @@
 # Justt MCP Installation
 
-One-time setup for Justt's Claude plugins.
+One-time setup for Justt's Claude plugins. There are two flavors: **Claude Desktop / Cowork / chat** (the desktop app) and **Claude Code** (the CLI) — install whichever you use; both is fine too.
 
 ## Prerequisites
 
-1. **Install the Claude desktop app** — download from https://claude.ai/download if you haven't already.
+1. **Install Claude** — the desktop app from https://claude.ai/download, and/or Claude Code from https://claude.com/claude-code.
 2. **Connect to the Justt VPN** — make sure the VPN is active before running the install command.
 3. **Enable VPN DNS** — in the VPN client, go to **Settings → "Use VPN Interface DNS"** and toggle it **on**.
 
-## Install
+## Install — Claude Desktop / Cowork
 
 ### Mac
 
@@ -28,12 +28,31 @@ irm https://plugins-api.justt.ai/init/windows | iex
 
 > **Run this command twice on Windows.** The first run installs Node.js and then exits — the newly installed `npx` is not yet available in that PowerShell session. **Close the PowerShell window, open a fresh one, and run the same command again.** The second run is the one that actually wires `justt-mcp` into Claude. (If Node.js was already installed on your machine, a single run is enough — but running it again is harmless.)
 
+Skills for these surfaces are managed org-wide by the admins — nothing extra to install.
+
+## Install — Claude Code (CLI)
+
+Mac / Linux / WSL. Open a terminal and run:
+
+```bash
+curl -fsSL https://plugins-api.justt.ai/init/code | bash
+```
+
+This registers the `justt-mcp` server, stores your work email in `~/.claude/CLAUDE.md` (so tools know who's calling), and installs all of Justt's skills. The skills come from a private GitHub repo, so you need GitHub access to the AcroCharge org — if you don't have it, use the skill-less variant:
+
+```bash
+curl -fsSL https://plugins-api.justt.ai/init/code | bash -s -- --no-skills
+```
+
+Skill updates arrive automatically at session start; re-running the command also works (and is how you pick up newly added skills).
+
 ## After Installation
 
 **Restart Claude** for the changes to take effect:
 
 - **Mac** — Quit Claude completely (right-click the dock icon → Quit, or Cmd+Q)
 - **Windows** — Close Claude and end the process in Task Manager to make sure it fully stops
+- **Claude Code** — just start a new `claude` session
 
 ## Test That It Works
 
@@ -49,4 +68,5 @@ This will exercise the HiBob integration.
 - **Tools not available after restart** — confirm you are connected to the Justt VPN with "Use VPN Interface DNS" enabled
 - **Node.js install failed (Mac)** — install Homebrew first: https://brew.sh, then re-run
 - **Node.js install failed (Windows)** — download from https://nodejs.org, then re-run
+- **"Could not add the plugin marketplace" (Claude Code)** — you don't have GitHub access to the AcroCharge org from this machine; ask Dor, or re-run with `--no-skills`
 - **Questions?** — ask Dor on Slack
