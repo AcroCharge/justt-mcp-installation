@@ -44,7 +44,9 @@ This registers the `justt-mcp` server, stores your work email in `~/.claude/CLAU
 curl -fsSL https://plugins-api.justt.ai/init/code | bash -s -- --no-skills
 ```
 
-Skill updates arrive automatically at session start; re-running the command also works (and is how you pick up newly added skills).
+Skill updates arrive automatically at session start; re-running the command also works (and is how you pick up newly added skills — automatic updates refresh the skills you already have, but never install brand-new ones).
+
+> **Installed before July 26, 2026? Re-run the command once.** Older installs have a bug where automatic skill updates silently never arrive (the updater couldn't authenticate to the private skills repo). The current installer fixes this as part of the run — one re-run and you're up to date and auto-updating from then on.
 
 ## After Installation
 
