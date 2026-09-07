@@ -67,7 +67,7 @@ This will exercise the HiBob integration.
 ## Troubleshooting
 
 - **"Claude directory not found"** — make sure the Claude desktop app is installed before running the command
-- **Tools not available after restart** — confirm you are connected to the Justt VPN with "Use VPN Interface DNS" enabled
+- **Tools not available / justt-mcp not connected** — the VPN must be connected *before* Claude starts. Connect the VPN (with "Use VPN Interface DNS" enabled), quit Claude completely (on Windows, also end it in Task Manager), reopen it, and start a **new** conversation — an existing one will not pick the tools up
 - **Node.js install failed (Mac)** — install Homebrew first: https://brew.sh, then re-run
 - **Node.js install failed (Windows)** — download from https://nodejs.org, then re-run
 - **"Could not add the plugin marketplace" (Claude Code)** — you don't have GitHub access to the AcroCharge org from this machine; ask Dor, or re-run with `--no-skills`
