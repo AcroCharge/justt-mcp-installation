@@ -38,7 +38,15 @@ Mac / Linux / WSL. Open a terminal and run:
 curl -fsSL https://plugins-api.justt.ai/init/code | bash
 ```
 
-This registers the `justt-mcp` server, stores your work email in `~/.claude/CLAUDE.md` (so tools know who's calling), and installs all of Justt's skills. The skills come from a private GitHub repo, so you need GitHub access to the AcroCharge org — the tools won't work without the skills. New to Claude Code or GitHub? See **First time on this Mac?** below.
+This registers the `justt-mcp` server, stores your work email in `~/.claude/CLAUDE.md` (so tools know who's calling), and installs all of Justt's skills. The skills come from a private GitHub repo, so you need GitHub access to the AcroCharge org. New to Claude Code or GitHub? See **First time on this Mac?** below.
+
+**Not connecting GitHub?** Use the skill-less variant — it sets up the server and your email, but not the skills:
+
+```bash
+curl -fsSL https://plugins-api.justt.ai/init/code | bash -s -- --no-skills
+```
+
+The tools won't answer without the skills, so then download the Justt skills from Cowork and add them to Claude Code manually.
 
 Skill updates arrive automatically at session start; re-running the command also works (and is how you pick up newly added skills — automatic updates refresh the skills you already have, but never install brand-new ones).
 
@@ -112,5 +120,5 @@ This will exercise the HiBob integration.
 - **Tools not available / justt-mcp not connected** — the VPN must be connected *before* Claude starts. Connect the VPN (with "Use VPN Interface DNS" enabled), quit Claude completely (on Windows, also end it in Task Manager), reopen it, and start a **new** conversation — an existing one will not pick the tools up
 - **Node.js install failed (Mac)** — install Homebrew first: https://brew.sh, then re-run
 - **Node.js install failed (Windows)** — download from https://nodejs.org, then re-run
-- **"Could not add the plugin marketplace" (Claude Code)** — git on this machine isn't logged in to GitHub, or your account doesn't have access yet; follow **First time on this Mac?** above
+- **"Could not add the plugin marketplace" (Claude Code)** — git on this machine isn't logged in to GitHub, or your account doesn't have access yet; follow **First time on this Mac?** above, or use the `--no-skills` variant and add the skills manually
 - **Questions?** — ask Dor on Slack
