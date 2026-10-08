@@ -120,5 +120,6 @@ This will exercise the HiBob integration.
 - **Tools not available / justt-mcp not connected** — the VPN must be connected *before* Claude starts. Connect the VPN (with "Use VPN Interface DNS" enabled), quit Claude completely (on Windows, also end it in Task Manager), reopen it, and start a **new** conversation — an existing one will not pick the tools up
 - **Node.js install failed (Mac)** — install Homebrew first: https://brew.sh, then re-run
 - **Node.js install failed (Windows)** — download from https://nodejs.org, then re-run
+- **justt-mcp works only sometimes (Windows)** — Claude gives a connector 60 seconds to start, and installs from before October 2026 started it in a way that re-downloads on every launch. Re-run the Windows install command above (it now installs the connector on your machine once), then close Claude completely (end it in Task Manager) and reopen it
 - **"Could not add the plugin marketplace" (Claude Code)** — git on this machine isn't logged in to GitHub, or your account doesn't have access yet; follow **First time on this Mac?** above, or use the `--no-skills` variant and add the skills manually
 - **Questions?** — ask Dor on Slack
