@@ -18,6 +18,8 @@ Open Terminal and run:
 curl -fsSL https://plugins-api.justt.ai/init/mac | bash
 ```
 
+> **Installed before October 23, 2026? Re-run the command once.** Besides wiring up Claude, it now checks the Node.js that Claude uses for the October 2026 security fix (CVE-2026-111497), upgrades it if needed, and ends with a line like `justt-mcp: node=v26.12.1 patched=yes`. If that line says `patched=no`, see **Troubleshooting** below. The upgrade can take a few minutes; let it finish.
+
 ### Windows
 
 Open PowerShell — press **Win + R**, type `powershell`, and press Enter (or click the Start menu, search for "PowerShell", and open it). Then run:
@@ -26,7 +28,7 @@ Open PowerShell — press **Win + R**, type `powershell`, and press Enter (or cl
 irm https://plugins-api.justt.ai/init/windows | iex
 ```
 
-> **Run this command twice on Windows.** The first run installs Node.js and then exits — the newly installed `npx` is not yet available in that PowerShell session. **Close the PowerShell window, open a fresh one, and run the same command again.** The second run is the one that actually wires `justt-mcp` into Claude. (If Node.js was already installed on your machine, a single run is enough — but running it again is harmless.)
+> **If the installer asks you to open a new PowerShell window and run the command again, do that.** On a machine without Node.js it installs Node.js first, and it can usually carry on in the same window; when it can't, it says so and stops. The second run is the one that wires `justt-mcp` into Claude. Running the command again is always harmless, and it also checks that the Node.js Claude uses has the October 2026 security fix (CVE-2026-111497), ending with a line like `justt-mcp: node=v24.22.1 patched=yes`.
 
 Skills for these surfaces are managed org-wide by the admins — nothing extra to install.
 
@@ -120,6 +122,7 @@ This will exercise the HiBob integration.
 - **Tools not available / justt-mcp not connected** — the VPN must be connected *before* Claude starts. Connect the VPN (with "Use VPN Interface DNS" enabled), quit Claude completely (on Windows, also end it in Task Manager), reopen it, and start a **new** conversation — an existing one will not pick the tools up
 - **Node.js install failed (Mac)** — install Homebrew first: https://brew.sh, then re-run
 - **Node.js install failed (Windows)** — download from https://nodejs.org, then re-run
+- **`patched=no` at the end of the install** — the installer could not upgrade Node.js on its own. Mac: run `brew upgrade node` (or `nvm install --lts` if you use nvm) and re-run the install command. Windows: install the current LTS from https://nodejs.org and re-run. Still `patched=no`? Send the full output to IT
 - **justt-mcp works only sometimes (Windows)** — Claude gives a connector 60 seconds to start, and installs from before October 2026 started it in a way that re-downloads on every launch. Re-run the Windows install command above (it now installs the connector on your machine once), then close Claude completely (end it in Task Manager) and reopen it
 - **"Could not add the plugin marketplace" (Claude Code)** — git on this machine isn't logged in to GitHub, or your account doesn't have access yet; follow **First time on this Mac?** above, or use the `--no-skills` variant and add the skills manually
 - **Questions?** — ask Dor on Slack
