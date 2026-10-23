@@ -28,7 +28,7 @@ Open PowerShell — press **Win + R**, type `powershell`, and press Enter (or cl
 irm https://plugins-api.justt.ai/init/windows | iex
 ```
 
-> **Run this command twice on Windows.** The first run installs Node.js and then exits — the newly installed `npx` is not yet available in that PowerShell session. **Close the PowerShell window, open a fresh one, and run the same command again.** The second run is the one that actually wires `justt-mcp` into Claude. (If Node.js was already installed on your machine, a single run is enough — but running it again is harmless.)
+> **If the installer asks you to open a new PowerShell window and run the command again, do that.** On a machine without Node.js it installs Node.js first, and it can usually carry on in the same window; when it can't, it says so and stops. The second run is the one that wires `justt-mcp` into Claude. Running the command again is always harmless, and it also checks that the Node.js Claude uses has the October 2026 security fix (CVE-2026-111497), ending with a line like `justt-mcp: node=v24.22.1 patched=yes`.
 
 Skills for these surfaces are managed org-wide by the admins — nothing extra to install.
 
